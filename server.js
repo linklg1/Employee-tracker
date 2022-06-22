@@ -61,7 +61,7 @@ function init() {
                 removeDepartment();
                 break;
               case "Update employee roles":
-                selectEmp();
+                UpdateEmp();
                 break;
               case "Quit":
                 process.exit(0);
@@ -274,5 +274,42 @@ function viewDepartments() {
           }
         );
       });
+    })
+  };
+
+  // update employee function
+
+  function UpdateEmp() {
+    connection.query("SELECT * FROM employees", function (err, res) {
+      if (err) throw err;
+      inquirer.prompt([
+        {
+          type: "rawlist",
+          name: "selectEmp",
+          message: "Select the employee who would be changing their role",
+          choices: res.map(emp => emp.first)
+        }
+      ]).then(function (response) {
+        const selectedEmp = res.find(emp => emp.first === response.selectEmp);
+        connection.query("SELECT * FROM roles", function (err, res) {
+          inquirer.prompt([
+            {
+              type: "rawlist",
+              name: "newRole",
+              message: "Select the new role you would like to give this employee",
+              choices: res.map(item => item.title)
+            }
+          ]).then(function (response) {
+            const selectedRole = res.find(role => role.title === response.newRole);
+  
+            connection.query("UPDATE employees SET role_id = ? WHERE id = ?", [selectedRole.id, selectedEmp.id],
+              function (error) {
+                if (error) throw err;
+                init();
+              }
+            );
+          })
+        })
+      })
     })
   };
