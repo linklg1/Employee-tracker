@@ -47,18 +47,6 @@ function init() {
               case "Add a new employee":
                 addEmployee();
                 break;
-              case "Delete an employee":
-                removeEmployee();
-                break;
-              case "Delete a role":
-                removeRole();
-                break;
-              case "Delete a department":
-                removeDepartment();
-                break;
-              case "Update employee roles":
-                UpdateEmp();
-                break;
               case "Quit":
                 process.exit(0);
                 break;
