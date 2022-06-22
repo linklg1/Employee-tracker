@@ -27,9 +27,9 @@ npm install console.table
 
 touch .env
 ```
-Edit .env file to include 
-DB_NAME=employee_DB
-DB_PASSWORD=`<yourmysqlpassword>`
+Edit .env file to include <br />
+DB_NAME=employee_DB <br />
+DB_PASSWORD=`<yourmysqlpassword>`<br />
 DB_USER=`<yourmysqlusername>`
 
 ## Usage
