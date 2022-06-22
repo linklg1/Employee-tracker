@@ -3,10 +3,12 @@ const inquirer = require("inquirer");
 const cTable = require('console.table');
 const {connection} = require('./config/connection');
 
+// build connection
 connection.connect(function (err) {
     if (err) throw err;
     console.log("Connected");
 });
+// main inquiry
 
 function init() {
     inquirer.prompt([
@@ -25,7 +27,6 @@ function init() {
             "Remove a role",
             "Remove a department",
             "Update employee roles",
-            "View the total utilized budget of a department",
             "Quit"
           ]
         }])
@@ -92,5 +93,106 @@ function viewDepartments() {
       if (err) throw err;
       console.table(response);
       init();
+    })
+  };
+
+  // Add functions
+  
+  //department
+
+  function addDepartment() {
+    inquirer.prompt([
+      {
+        name: "addDept",
+        type: "input",
+        message: "What is the name of the new department?"
+      }
+    ]).then(function (response) {
+      connection.query(
+        "INSERT INTO departments SET ?", {
+        name: response.addDept
+      },
+        function (err, res) {
+          if (err) throw err;
+          console.log(" Department Successfully Added!\n");
+          init();
+        }
+      );
+    });
+  }
+  
+// role
+  function addRole() {
+    connection.query("SELECT * FROM departments", function (err, res) {
+      if (err) throw err;     
+      inquirer.prompt([
+        {
+          name: "role",
+          type: "input",
+          message: "What is the new role?"
+        },
+        {
+          name: "pay",
+          type: "number",
+          message: "What is the salary?",
+        },
+        {
+          name: "deptId",
+          type: "rawlist",
+          message: "Select a department for this role",
+          choices: res.map(item => item.name)
+        }
+      ]).then(function (responses) {
+        const selectedDept = res.find(dept => dept.name === responses.deptId);
+        connection.query("INSERT INTO roles SET ?",
+          {
+            title: responses.role,
+            salary: responses.pay,
+            dept_id: selectedDept.id
+          },
+          function (err, res) {
+            if (err) throw err;
+            console.log("New role successfully added!\n");
+            init();
+          }
+        );
+      });
+    })
+  };
+
+  // employee 
+  function addEmployee() {
+    connection.query("SELECT * FROM roles", function (err, results) {
+      if (err) throw err;
+      inquirer.prompt([
+        {
+          name: "first",
+          type: "input",
+          message: "What is the new employee's first name?"
+        },
+        {
+          name: "last",
+          type: "input",
+          message: "What is the new employee's last name?"
+        },
+        {
+          name: "roleId",
+          type: "rawlist",
+          choices: results.map(item => item.title),
+          message: "Select a role for the employee"
+        }
+      ]).then(function (responses) {
+        const selectedRole = results.find(item => item.title === responses.roleId);
+        connection.query("INSERT INTO employees SET ?",
+          {
+            first_name: responses.first,
+            last_name: responses.last,
+            role_id: selectedRole.id
+          }, function (err, res) {
+            if (err) throw err;
+            console.log("Added new employee named " + responses.first + " " + responses.last + "\n");
+            init();
+          })
+      })
     })
   };
