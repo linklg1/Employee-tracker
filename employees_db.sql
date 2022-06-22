@@ -5,6 +5,8 @@ USE employee_DB;
 CREATE TABLE departments (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     name VARCHAR(100) NOT NULL
+    
+    
 );
 
 CREATE TABLE roles (
@@ -13,6 +15,7 @@ CREATE TABLE roles (
     salary DECIMAL(10,2) NOT NULL, 
     dept_id  INT NOT NULL,
     FOREIGN KEY (dept_id) REFERENCES departments(id)
+    
 );
 
 CREATE TABLE employees (
@@ -23,4 +26,5 @@ CREATE TABLE employees (
     manager_id INT NULL,
     FOREIGN KEY (role_id) REFERENCES roles(id),
     FOREIGN KEY (manager_id) REFERENCES employees(id)
+    
 );

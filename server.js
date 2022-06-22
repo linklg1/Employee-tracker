@@ -23,10 +23,6 @@ function init() {
             "Add a new department",
             "Add a new role",
             "Add a new employee",
-            "Remove an employee",
-            "Remove a role",
-            "Remove a department",
-            "Update employee roles",
             "Quit"
           ]
         }])
@@ -51,13 +47,13 @@ function init() {
               case "Add a new employee":
                 addEmployee();
                 break;
-              case "Remove an employee":
+              case "Delete an employee":
                 removeEmployee();
                 break;
-              case "Remove a role":
+              case "Delete a role":
                 removeRole();
                 break;
-              case "Remove a department":
+              case "Delete a department":
                 removeDepartment();
                 break;
               case "Update employee roles":
@@ -75,7 +71,7 @@ function init() {
 function viewDepartments() {
     connection.query(`SELECT * FROM departments`, function (err, res) {
       if (err) throw err;
-      console.table(response);
+      console.table(res);
       init();
     })
   };
@@ -83,7 +79,7 @@ function viewDepartments() {
   function viewRoles() {
     connection.query(`SELECT * FROM roles`, function (err, res) {
       if (err) throw err;
-      console.table(response);
+      console.table(res);
       init();
     })
   };
@@ -91,7 +87,7 @@ function viewDepartments() {
   function viewEmployees() {
     connection.query(`SELECT * FROM employees`, function (err, res) {
       if (err) throw err;
-      console.table(response);
+      console.table(res);
       init();
     })
   };
@@ -197,119 +193,6 @@ function viewDepartments() {
     })
   };
 
-  //remove functions
- // employee
-  function removeEmployee() {
-    connection.query("SELECT * FROM employees", function (err, res) {
-      if (err) throw err;
-      inquirer.prompt([
-        {
-          type: "rawlist",
-          name: "removeEmployee",
-          message: "Select the employee who you want to remove",
-          choices: res.map(emp => emp.id && emp.first)
-        }
-      ]).then(function (response) {
-        const selectedEmp = res.find(emp => emp.id && emp.first === response.removeEmployee);
-        connection.query("DELETE FROM employees WHERE ?",
-          [{
-            id: selectedEmp.id
-          }],
-          function (err, res) {
-            if (err) throw err;
-            console.log("Employee Successfully Removed\n");
-            init();
-          }
-        );
-      });
-    })
-  };
-  //role
-  function removeRole() {
-    connection.query("SELECT * FROM roles", function (err, res) {
-      if (err) throw err;
-      inquirer.prompt([
-        {
-          type: "rawlist",
-          name: "removeRole",
-          message: "Select the role you want to remove",
-          choices: res.map(role => role.id && role.title)
-        }
-      ]).then(function (response) {
-        const selectedRole = res.find(role => role.id && role.role === response.removeRole);
-        connection.query("DELETE FROM roles WHERE ?",
-          [{
-            id: selectedRole.id
-          }],
-          function (err, res) {
-            if (err) throw err;
-            console.log("Role Successfully Removed\n");
-            init();
-          }
-        );
-      });
-    })
-  };
-  //department
-  function removeDepartment() {
-    connection.query("SELECT * FROM departments", function (err, res) {
-      if (err) throw err;
-      inquirer.prompt([
-        {
-          type: "rawlist",
-          name: "removeDept",
-          message: "Select the department you want to remove",
-          choices: res.map(item => item.id && item.name)
-        }
-      ]).then(function (response) {
-        const selectedDept = res.find(item => item.id && item.name === response.removeDept);
-        connection.query("DELETE FROM roles WHERE ?",
-          [{
-            id: selectedDept.id
-          }],
-          function (err, res) {
-            if (err) throw err;
-            console.log("Department Successfully Removed\n");
-            init();
-          }
-        );
-      });
-    })
-  };
+ 
 
-  // update employee function
-
-  function UpdateEmp() {
-    connection.query("SELECT * FROM employees", function (err, res) {
-      if (err) throw err;
-      inquirer.prompt([
-        {
-          type: "rawlist",
-          name: "selectEmp",
-          message: "Select the employee who would be changing their role",
-          choices: res.map(emp => emp.first)
-        }
-      ]).then(function (response) {
-        const selectedEmp = res.find(emp => emp.first === response.selectEmp);
-        connection.query("SELECT * FROM roles", function (err, res) {
-          inquirer.prompt([
-            {
-              type: "rawlist",
-              name: "newRole",
-              message: "Select the new role you would like to give this employee",
-              choices: res.map(item => item.title)
-            }
-          ]).then(function (response) {
-            const selectedRole = res.find(role => role.title === response.newRole);
-  
-            connection.query("UPDATE employees SET role_id = ? WHERE id = ?", [selectedRole.id, selectedEmp.id],
-              function (error) {
-                if (error) throw err;
-                init();
-              }
-            );
-          })
-        })
-      })
-    })
-  };
+  init();
