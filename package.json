@@ -20,6 +20,7 @@
   "homepage": "https://github.com/linklg1/Employee-tracker#readme",
   "dependencies": {
     "console.table": "^0.10.0",
+    "dotenv": "^16.0.1",
     "inquirer": "^9.0.0",
     "mysql2": "^2.3.3"
   }
