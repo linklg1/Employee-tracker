@@ -13,10 +13,13 @@ A command-line application that manages a company's employee database, using Nod
 
 
 ## Installation
+You will need to clone the [Repo](#Repo)
 
 Packages that need installation include: Inquirer, mysql2, dotenv, console.table
 
 You will also need to create a '.env' file with the correct inputs in place you can input the data set provided in .env.EXAMPLE into your .env file and provide your mysql username and password
+
+You will need to run mysql and enter in both databases before running an npm start make sure you are in the root folder in the terminal.
 
 
 ```bash
@@ -32,6 +35,15 @@ DB_NAME=employee_DB <br />
 DB_PASSWORD=`<yourmysqlpassword>`<br />
 DB_USER=`<yourmysqlusername>`
 
+```bash
+mysql -uroot -p
+Enter Password:
+source employees_db.sql
+source ./Assets/seeds.sql
+exit
+
+npm start
+```
 ## Usage
 
 ```bash
@@ -46,7 +58,7 @@ DB_USER=`<yourmysqlusername>`
 ```
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome. 
 
 
 ## Liscense
@@ -54,6 +66,7 @@ None
 
 ## VideoLink 
 Video of running app:
+https://youtu.be/HU_sIxusZgE
 
 
 
