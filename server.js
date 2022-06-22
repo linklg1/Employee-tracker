@@ -58,8 +58,8 @@ function init() {
                 removeRole();
                 break;
               case "Remove a department":
-                  removeDepartment();
-                  break;
+                removeDepartment();
+                break;
               case "Update employee roles":
                 selectEmp();
                 break;
@@ -194,5 +194,85 @@ function viewDepartments() {
             init();
           })
       })
+    })
+  };
+
+  //remove functions
+ // employee
+  function removeEmployee() {
+    connection.query("SELECT * FROM employees", function (err, res) {
+      if (err) throw err;
+      inquirer.prompt([
+        {
+          type: "rawlist",
+          name: "removeEmployee",
+          message: "Select the employee who you want to remove",
+          choices: res.map(emp => emp.id && emp.first)
+        }
+      ]).then(function (response) {
+        const selectedEmp = res.find(emp => emp.id && emp.first === response.removeEmployee);
+        connection.query("DELETE FROM employees WHERE ?",
+          [{
+            id: selectedEmp.id
+          }],
+          function (err, res) {
+            if (err) throw err;
+            console.log("Employee Successfully Removed\n");
+            init();
+          }
+        );
+      });
+    })
+  };
+  //role
+  function removeRole() {
+    connection.query("SELECT * FROM roles", function (err, res) {
+      if (err) throw err;
+      inquirer.prompt([
+        {
+          type: "rawlist",
+          name: "removeRole",
+          message: "Select the role you want to remove",
+          choices: res.map(role => role.id && role.title)
+        }
+      ]).then(function (response) {
+        const selectedRole = res.find(role => role.id && role.role === response.removeRole);
+        connection.query("DELETE FROM roles WHERE ?",
+          [{
+            id: selectedRole.id
+          }],
+          function (err, res) {
+            if (err) throw err;
+            console.log("Role Successfully Removed\n");
+            init();
+          }
+        );
+      });
+    })
+  };
+  //department
+  function removeDepartment() {
+    connection.query("SELECT * FROM departments", function (err, res) {
+      if (err) throw err;
+      inquirer.prompt([
+        {
+          type: "rawlist",
+          name: "removeDept",
+          message: "Select the department you want to remove",
+          choices: res.map(item => item.id && item.name)
+        }
+      ]).then(function (response) {
+        const selectedDept = res.find(item => item.id && item.name === response.removeDept);
+        connection.query("DELETE FROM roles WHERE ?",
+          [{
+            id: selectedDept.id
+          }],
+          function (err, res) {
+            if (err) throw err;
+            console.log("Department Successfully Removed\n");
+            init();
+          }
+        );
+      });
     })
   };
